@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-green-500">
+  <footer class="bg-green-500 footer">
     <div class="container-fluid py-4 px-6">
       <div class="row">
         <div class="col-12 col-md-7">
@@ -50,5 +50,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </footer>
 </template>
