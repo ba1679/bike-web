@@ -1,0 +1,30 @@
+.nav-link{
+  margin-right: 15px;
+  margin-left: 15px;
+  border-bottom: 2px solid transparent;
+  letter-spacing: $letter-2;
+}
+.nav-link:hover{
+  border-bottom: 2px solid $primary;
+}
+.list-group-item{
+  letter-spacing: $letter-05;
+  color: $gray-200;
+  span{
+    margin-right: 40px;
+  }
+  a{
+    color: $black;
+    &:hover{
+      color: $primary;
+    }
+  }
+}
+.btn-primary:hover{
+  background-color: $green-200;
+  border-color: $green-200;
+}
+.btn-warning:hover{
+  background-color: $yellow-200;
+  border-color: $yellow-200;
+}
