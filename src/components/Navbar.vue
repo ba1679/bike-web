@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <h1>
-      <a class="navbar-brand d-flex" href="#">
+      <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
         <img
           src="../assets/images/logo-icon.png"
           width="46"
@@ -14,7 +14,7 @@
             TAIWAN BIKE <br />台灣自行車資訊網
           </div>
         </div>
-      </a>
+      </router-link>
     </h1>
     <button
       class="navbar-toggler"
@@ -29,16 +29,24 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="#"
             >最新消息 <span class="sr-only">(current)</span></a
           >
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">自行車路線</a>
+        <li class="nav-item" :class="{ active: routeName === 'Route' }">
+          <router-link class="nav-link" :to="{ name: 'Route' }"
+            >自行車路線<span class="sr-only" v-if="routeName === 'Route'"
+              >(current)</span
+            >
+          </router-link>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">單車租借</a>
+        <li class="nav-item" :class="{ active: routeName === 'Station' }">
+          <router-link class="nav-link" :to="{ name: 'Station' }"
+            >單車租借<span class="sr-only" v-if="routeName === 'Station'"
+              >(current)</span
+            ></router-link
+          >
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">騎乘小叮嚀</a>
@@ -47,3 +55,12 @@
     </div>
   </nav>
 </template>
+<script>
+export default {
+  computed: {
+    routeName () {
+      return this.$route.name
+    }
+  }
+}
+</script>
