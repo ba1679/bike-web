@@ -1,0 +1,25 @@
+.map-height{
+  height: calc(100vh - 100px) !important;
+}
+.popUp{
+  min-width: 400px !important;
+}
+.info-card{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+  padding: 5px 15px;
+  p{
+    margin: 0;
+  }
+  p:first-child{
+    margin-right: 10px;
+  }
+}
+.popup{
+  .card-body{
+    padding: 10px;
+    letter-spacing: $letter-05;
+  }
+}
