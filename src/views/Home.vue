@@ -39,32 +39,40 @@
       <!-- buttons -->
       <div class="row row-cols-md-3 justify-content-center my-8">
         <div class="col mr-8">
-          <button
-            class="btn btn-primary btn-block shadow py-3 h-100"
-            type="button"
-          >
-            <img
-              class="img-fluid mr-4"
-              src="../assets/images/line-white-icon.png"
-              alt="自行車路線"
-              width="44"
-            />
-            自行車路線
-          </button>
+          <router-link :to="{ name: 'Route' }" custom v-slot="{ navigate }">
+            <button
+              class="btn btn-primary btn-block shadow py-3 h-100"
+              type="button"
+              @click="navigate"
+              role="link"
+            >
+              <img
+                class="img-fluid mr-4"
+                src="../assets/images/line-white-icon.png"
+                alt="自行車路線"
+                width="44"
+              />
+              自行車路線
+            </button>
+          </router-link>
         </div>
         <div class="col">
-          <button
-            class="btn btn-warning btn-block text-white shadow py-3 h-100"
-            type="button"
-          >
-            <img
-              class="img-fluid mr-4"
-              src="../assets/images/bike-white-icon.png"
-              alt="自行車路線"
-              width="39"
-            />
-            單車租借
-          </button>
+          <router-link :to="{ name: 'Station' }" custom v-slot="{ navigate }">
+            <button
+              class="btn btn-warning btn-block text-white shadow py-3 h-100"
+              type="button"
+              @click="navigate"
+              role="link"
+            >
+              <img
+                class="img-fluid mr-4"
+                src="../assets/images/bike-white-icon.png"
+                alt="自行車路線"
+                width="39"
+              />
+              單車租借
+            </button>
+          </router-link>
         </div>
       </div>
       <!-- news -->
