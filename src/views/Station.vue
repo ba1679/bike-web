@@ -55,7 +55,7 @@
         </LMarker>
       </v-marker-cluster>
     </LMap>
-    <div class="card search-card">
+    <!-- <div class="card search-card">
       <div class="card-body">
         <h2 class="card-title letter-5">站牌搜尋</h2>
         <form class="card-text">
@@ -93,7 +93,7 @@
           搜尋
         </button>
       </div>
-    </div>
+    </div> -->
     <div class="d-flex rent-btn">
       <button
         class="btn btn-black mr-2"
@@ -112,6 +112,18 @@
         還車
       </button>
     </div>
+    <SearchCard
+      :cities="cities"
+      :key-word.sync="keyWord"
+      :city-select.sync="citySelect"
+      :inputPlaceholder="'請輸入站牌關鍵字(非必填)'"
+      @update:keyWord="keyWord = $event"
+      @loadCityStationsData="loadCityStationsData"
+    >
+      <template v-slot:title>
+        <h2 class="card-title letter-5">站牌搜尋</h2>
+      </template>
+    </SearchCard>
   </div>
 </template>
 <script>
@@ -121,10 +133,14 @@ import 'mapbox-gl-leaflet'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { mapState, mapGetters } from 'vuex'
 import { format } from 'date-fns'
+import SearchCard from '@/components/SearchCard.vue'
 window.mapboxgl = mapboxgl
 
 export default {
   name: 'Station',
+  components: {
+    SearchCard
+  },
   computed: {
     ...mapState('station', ['noData']),
     ...mapGetters({
