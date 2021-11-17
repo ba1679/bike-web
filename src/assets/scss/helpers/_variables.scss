@@ -1,11 +1,14 @@
-// 把bs4的變數複製過來客製自己想要的顏色 EX: 64行
+$letter-1: .2em;
+$letter-2: .285em;
+$letter-3: .3em;
+$letter-05: .05em;
 
 // Color system
 
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #828282;//#e9ecef !default;
-$gray-300: #dee2e6 !default;
+$gray-300: #C8C8C8;//#dee2e6 !default;
 $gray-400: #ced4da !default;
 $gray-500: #adb5bd !default;
 $gray-600: #ACACAC; //#6c757d !default;
@@ -89,7 +92,11 @@ $theme-colors: map-merge(
     'black': $black,
     'green': $green,
     'gray': $gray-600,
-    'green-500': $green-500
+    'gray-100': $gray-100,
+    'gray-200': $gray-200,
+    'gray-300': $gray-300,
+    'green-500': $green-500,
+    'green-200': $green-200,
   ),
   $theme-colors
 );
@@ -837,7 +844,7 @@ $jumbotron-bg: $gray-200 !default;
 // Cards
 
 $card-spacer-y: 0.75rem !default;
-$card-spacer-x: 1.25rem !default;
+$card-spacer-x: 20px;//1.25rem !default;
 $card-border-width: 0 !default; //$border-width
 $card-border-radius: 0;//$border-radius !default;
 $card-border-color: transparent !default; //rgba($black, 0.125)
