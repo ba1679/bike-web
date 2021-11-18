@@ -235,7 +235,18 @@ export default {
           console.log(err)
         })
     },
-    loadNearByCityStationData () {},
+    loadNearByCityStationData (lat, long) {
+      this.$store.dispatch('setIsLoading', true)
+      return this.$store
+        .dispatch('station/fetchNearByCityStationsData', { lat, long })
+        .then(() => {
+          this.$store.dispatch('setIsLoading', false)
+        })
+        .catch((err) => {
+          this.$store.dispatch('setIsLoading', false)
+          console.log(err)
+        })
+    },
     iconColor (serviceStatus, rentIcon, returnIcon) {
       if (this.serviceSelect === 'rent') {
         if (serviceStatus !== 1) {
@@ -268,12 +279,14 @@ export default {
       }
     }
   },
-  created () {
-    this.loadCityStationsData()
-  },
   mounted () {
     this.$nextTick(() => {
       this.map = this.$refs.map.mapObject
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude
+        const long = position.coords.longitude
+        this.loadNearByCityStationData(lat, long)
+      })
     })
   },
   watch: {
