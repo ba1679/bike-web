@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid position-relative">
     <LMap
-      ref="myMap"
+      ref="map"
       id="map"
       :center="center"
       :zoom="zoom"
@@ -113,6 +113,7 @@ export default {
   },
   data () {
     return {
+      map: null,
       cities: [
         {
           CityName: '臺中市',
@@ -215,7 +216,9 @@ export default {
         this.markerData.push(markers)
       }
       if (this.markerData[0]?.position) {
-        this.$refs.myMap.mapObject.setView(this.markerData[0].position, 13)
+        this.map.flyTo(this.markerData[0].position, 15, {
+          animate: true
+        })
       }
       this.$store.dispatch('setIsLoading', false)
     },
@@ -232,6 +235,7 @@ export default {
           console.log(err)
         })
     },
+    loadNearByCityStationData () {},
     iconColor (serviceStatus, rentIcon, returnIcon) {
       if (this.serviceSelect === 'rent') {
         if (serviceStatus !== 1) {
@@ -269,15 +273,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      // 獲得目前位置
-      navigator.geolocation.getCurrentPosition((position) => {
-        const p = position.coords
-        // 將中心點設為目前的位置
-        // this.center = [p.latitude, p.longitude]
-        console.log(p, this.$refs.myMap.mapObject.setView())
-        // 將目前的位置的標記點彈跳視窗打開
-        // this.$refs.location.mapObject.openPopup()
-      })
+      this.map = this.$refs.map.mapObject
     })
   },
   watch: {
