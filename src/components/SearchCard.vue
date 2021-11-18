@@ -13,7 +13,7 @@
         </div>
         <div class="d-flex">
           <div class="form-group flex-grow-1">
-            <label for="city">縣市</label>
+            <label for="city">縣市 <span class="text-danger"> *</span></label>
             <select
               id="city"
               class="form-control custom-select select-icon font-weight-light"
@@ -29,12 +29,29 @@
               </option>
             </select>
           </div>
+          <div class="form-group ml-1" v-if="$route.name === 'Route'">
+            <label for="district">鄉鎮區</label>
+            <select
+              id="district"
+              class="form-control custom-select select-icon font-weight-light"
+              v-model="childAreaSelect"
+            >
+              <option selected :value="null">請選擇鄉鎮</option>
+              <option
+                v-for="(area, i) of areaList"
+                :key="i"
+                :value="area.AreaName"
+              >
+                {{ area.AreaName }}
+              </option>
+            </select>
+          </div>
         </div>
       </form>
       <button
         class="btn btn-primary btn-block btn-sm"
         type="button"
-        @click="toLoadCityStationsData"
+        @click="toLoadData"
       >
         搜尋
       </button>
@@ -59,6 +76,12 @@ export default {
     },
     inputPlaceholder: {
       type: String
+    },
+    areaList: {
+      type: Array
+    },
+    areaSelect: {
+      type: String
     }
   },
   computed: {
@@ -77,14 +100,22 @@ export default {
       set (val) {
         this.$emit('update:citySelect', val)
       }
+    },
+    childAreaSelect: {
+      get () {
+        return this.areaSelect
+      },
+      set (val) {
+        this.$emit('update:areaSelect', val)
+      }
     }
   },
   data () {
     return {}
   },
   methods: {
-    toLoadCityStationsData () {
-      this.$emit('loadCityStationsData')
+    toLoadData () {
+      this.$emit('loadCityData')
     }
   }
 }
