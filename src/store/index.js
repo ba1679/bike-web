@@ -5,6 +5,7 @@ import JsSHA from 'jssha'
 
 // module
 import station from './station.js'
+import route from './route.js'
 
 Vue.use(Vuex)
 
@@ -73,6 +74,7 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    station
+    station,
+    route
   }
 })
