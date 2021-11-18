@@ -18,8 +18,12 @@
   }
 }
 .popup{
+  font-family: "Noto Sans TC";
   .card-body{
     padding: 10px;
     letter-spacing: $letter-05;
+  }
+  p{
+    font-size: 16px;
   }
 }
