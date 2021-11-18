@@ -1,6 +1,7 @@
 <template>
   <div class="container-fluid position-relative">
     <LMap
+      ref="myMap"
       id="map"
       :center="center"
       :zoom="zoom"
@@ -54,45 +55,6 @@
         </LMarker>
       </v-marker-cluster>
     </LMap>
-    <div class="card search-card">
-      <div class="card-body">
-        <h2 class="card-title letter-5">站牌搜尋</h2>
-        <form class="card-text">
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control font-weight-light"
-              placeholder="請輸入站牌關鍵字"
-              v-model="keyWord"
-            />
-          </div>
-          <div class="form-group">
-            <label for="city">縣市</label>
-            <select
-              id="city"
-              class="form-control custom-select select-icon font-weight-light"
-              v-model="citySelect"
-            >
-              <option selected disabled :value="null">請選擇縣市</option>
-              <option
-                v-for="city of cities"
-                :key="city.CityName"
-                :value="city.CityEngName"
-              >
-                {{ city.CityName }}
-              </option>
-            </select>
-          </div>
-        </form>
-        <button
-          class="btn btn-primary btn-block btn-sm"
-          type="button"
-          @click="loadCityStationsData"
-        >
-          搜尋
-        </button>
-      </div>
-    </div>
     <div class="d-flex rent-btn">
       <button
         class="btn btn-black mr-2"
@@ -111,6 +73,18 @@
         還車
       </button>
     </div>
+    <SearchCard
+      :cities="cities"
+      :key-word.sync="keyWord"
+      :city-select.sync="citySelect"
+      :inputPlaceholder="'請輸入站牌關鍵字(非必填)'"
+      @update:keyWord="keyWord = $event"
+      @loadCityData="loadCityStationsData"
+    >
+      <template v-slot:title>
+        <h2 class="card-title letter-5">站牌搜尋</h2>
+      </template>
+    </SearchCard>
   </div>
 </template>
 <script>
@@ -120,10 +94,14 @@ import 'mapbox-gl-leaflet'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { mapState, mapGetters } from 'vuex'
 import { format } from 'date-fns'
+import SearchCard from '@/components/SearchCard.vue'
 window.mapboxgl = mapboxgl
 
 export default {
   name: 'Station',
+  components: {
+    SearchCard
+  },
   computed: {
     ...mapState('station', ['noData']),
     ...mapGetters({
@@ -236,6 +214,9 @@ export default {
         }
         this.markerData.push(markers)
       }
+      if (this.markerData[0]?.position) {
+        this.$refs.myMap.mapObject.setView(this.markerData[0].position, 13)
+      }
       this.$store.dispatch('setIsLoading', false)
     },
     loadCityStationsData () {
@@ -285,6 +266,19 @@ export default {
   },
   created () {
     this.loadCityStationsData()
+  },
+  mounted () {
+    this.$nextTick(() => {
+      // 獲得目前位置
+      navigator.geolocation.getCurrentPosition((position) => {
+        const p = position.coords
+        // 將中心點設為目前的位置
+        // this.center = [p.latitude, p.longitude]
+        console.log(p, this.$refs.myMap.mapObject.setView())
+        // 將目前的位置的標記點彈跳視窗打開
+        // this.$refs.location.mapObject.openPopup()
+      })
+    })
   },
   watch: {
     stationsData: {

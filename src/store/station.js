@@ -52,8 +52,7 @@ export default {
         return dispatch('getCityBikeStations', { city, keyword })
           .then(() => {
             return dispatch('getCityBikeStationsAvailability', {
-              city,
-              keyword
+              city
             })
           })
           .then(() => {
@@ -107,44 +106,23 @@ export default {
         }
       })
     },
-    getCityBikeStationsAvailability (
-      { dispatch, commit, rootState },
-      { city, keyword }
-    ) {
+    getCityBikeStationsAvailability ({ dispatch, commit, rootState }, { city }) {
       dispatch('getAuthorizationHeader', {}, { root: true }).then(() => {
-        if (keyword) {
-          return axios
-            .get(
-              `${process.env.VUE_APP_APIPATH}Bike/Availability/${city}?$filter=contains(StationName/Zh_tw, '${keyword}')&$format=JSON`,
-              {
-                headers: rootState.apiHeader
-              }
-            )
-            .then((res) => {
-              commit('SET_STATIONS_AVAILABILITY', res.data)
-              return res
-            })
-            .catch((err) => {
-              const errText = 'get city bike station availability: ' + err
-              return Promise.reject(errText)
-            })
-        } else {
-          return axios
-            .get(
-              `${process.env.VUE_APP_APIPATH}Bike/Availability/${city}?$format=JSON`,
-              {
-                headers: rootState.apiHeader
-              }
-            )
-            .then((res) => {
-              commit('SET_STATIONS_AVAILABILITY', res.data)
-              return res
-            })
-            .catch((err) => {
-              const errText = 'get city bike station availability: ' + err
-              return Promise.reject(errText)
-            })
-        }
+        return axios
+          .get(
+            `${process.env.VUE_APP_APIPATH}Bike/Availability/${city}?&$format=JSON`,
+            {
+              headers: rootState.apiHeader
+            }
+          )
+          .then((res) => {
+            commit('SET_STATIONS_AVAILABILITY', res.data)
+            return res
+          })
+          .catch((err) => {
+            const errText = 'get city bike station availability: ' + err
+            return Promise.reject(errText)
+          })
       })
     }
   }
