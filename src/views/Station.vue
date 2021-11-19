@@ -237,15 +237,20 @@ export default {
     },
     loadNearByCityStationData (lat, long) {
       this.$store.dispatch('setIsLoading', true)
-      return this.$store
-        .dispatch('station/fetchNearByCityStationsData', { lat, long })
-        .then(() => {
-          this.$store.dispatch('setIsLoading', false)
-        })
-        .catch((err) => {
-          this.$store.dispatch('setIsLoading', false)
-          console.log(err)
-        })
+      if (lat && long) {
+        this.getLocationCity(lat, long)
+        return this.$store
+          .dispatch('station/fetchNearByCityStationsData', { lat, long })
+          .then(() => {
+            this.$store.dispatch('setIsLoading', false)
+          })
+          .catch((err) => {
+            this.$store.dispatch('setIsLoading', false)
+            console.log(err)
+          })
+      } else {
+        this.loadCityStationsData()
+      }
     },
     iconColor (serviceStatus, rentIcon, returnIcon) {
       if (this.serviceSelect === 'rent') {
@@ -277,15 +282,27 @@ export default {
             break
         }
       }
+    },
+    getLocationCity (lat, long) {
+      this.axios
+        .get(
+          `https://api.nlsc.gov.tw/other/TownVillagePointQuery/${long}/${lat}`
+        )
+        .then((res) => {
+          const city = res.data.ctyName
+          const enCity = this.cities.find((item) => {
+            return item.CityName === city
+          })
+          this.citySelect = enCity.CityEngName
+        })
     }
   },
   mounted () {
     this.$nextTick(() => {
       this.map = this.$refs.map.mapObject
       navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude
-        const long = position.coords.longitude
-        this.loadNearByCityStationData(lat, long)
+        const { latitude, longitude } = position.coords
+        this.loadNearByCityStationData(latitude, longitude)
       })
     })
   },
