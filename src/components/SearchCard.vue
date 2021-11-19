@@ -2,13 +2,14 @@
   <div class="card search-card">
     <div class="card-body">
       <slot name="title"> </slot>
-      <form class="card-text">
+      <form class="card-text" @submit.prevent>
         <div class="form-group">
           <input
             type="text"
             class="form-control font-weight-light"
             :placeholder="inputPlaceholder"
             v-model="childKeyWord"
+            @keyup.enter.prevent="toLoadData"
           />
         </div>
         <div class="d-flex">
@@ -18,6 +19,7 @@
               id="city"
               class="form-control custom-select select-icon font-weight-light"
               v-model="childCitySelect"
+              @change="toCleanAreaSelect"
             >
               <option selected disabled :value="null">請選擇縣市</option>
               <option
@@ -110,12 +112,12 @@ export default {
       }
     }
   },
-  data () {
-    return {}
-  },
   methods: {
     toLoadData () {
       this.$emit('loadCityData')
+    },
+    toCleanAreaSelect () {
+      this.$emit('cleanAreaSelect')
     }
   }
 }
