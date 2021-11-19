@@ -1,6 +1,6 @@
 <template>
   <footer class="bg-green-500">
-    <div class="container-fluid py-4 px-6">
+    <div class="container-fluid py-4 px-4 px-lg-6">
       <div class="row">
         <div class="col-12 col-md-7">
           <a class="d-flex" href="#">
@@ -19,7 +19,7 @@
           </a>
           ©2021 , Taiwan Bike. All Rights Reserved.
         </div>
-        <div class="col-5 d-none d-md-block">
+        <div class="col-5 d-none d-lg-block">
           <ul class="d-flex list-unstyled">
             <li class="mr-6">
               <a href="#">最新消息</a>

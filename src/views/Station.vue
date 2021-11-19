@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid position-relative">
+  <div class="container-fluid position-relative px-0">
     <LMap
       ref="map"
       id="map"
@@ -80,6 +80,8 @@
       :inputPlaceholder="'請輸入站牌關鍵字(非必填)'"
       @update:keyWord="keyWord = $event"
       @loadCityData="loadCityStationsData"
+      @toggleSearchCard="toggleSearchCard"
+      :searchCardShow="searchCardShow"
     >
       <template v-slot:title>
         <h2 class="card-title letter-5">站牌搜尋</h2>
@@ -105,6 +107,7 @@ export default {
   computed: {
     ...mapState('station', ['noData']),
     ...mapGetters({
+      isMobile: 'isMobile',
       stationsData: 'station/stationsAndAvailability'
     }),
     center () {
@@ -177,7 +180,8 @@ export default {
       citySelect: 'Taipei',
       serviceSelect: 'rent',
       dataLoaded: false,
-      keyWord: ''
+      keyWord: '',
+      searchCardShow: true
     }
   },
   methods: {
@@ -229,7 +233,9 @@ export default {
           city: this.citySelect,
           keyword: this.keyWord
         })
-        .then(() => {})
+        .then(() => {
+          if (this.isMobile) this.searchCardShow = false
+        })
         .catch((err) => {
           this.$store.dispatch('setIsLoading', false)
           console.log(err)
@@ -295,6 +301,9 @@ export default {
           })
           this.citySelect = enCity.CityEngName
         })
+    },
+    toggleSearchCard () {
+      this.searchCardShow = !this.searchCardShow
     }
   },
   mounted () {

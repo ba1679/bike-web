@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid position-relative">
+  <div class="container-fluid position-relative px-0">
     <LMap
       ref="map"
       id="map"
@@ -17,6 +17,7 @@
         v-if="geoJsonData.features.length"
       />
     </LMap>
+
     <SearchCard
       :cities="cities"
       :areaList="areaList"
@@ -27,6 +28,8 @@
       @update:keyWord="keyWord = $event"
       @loadCityData="searchShapeData"
       @cleanAreaSelect="cleanAreaSelect"
+      @toggleSearchCard="toggleSearchCard"
+      :searchCardShow="searchCardShow"
     >
       <template v-slot:title>
         <h2 class="card-title letter-5">路線搜尋</h2>
@@ -56,6 +59,7 @@ export default {
     ...mapState(['cities']),
     ...mapState('route', ['areaSelect', 'noData']),
     ...mapGetters({
+      isMobile: 'isMobile',
       routesData: 'route/filteredRoutes'
     }),
     areaList () {
@@ -122,7 +126,8 @@ export default {
             { minWidth: 250 }
           )
         }
-      }
+      },
+      searchCardShow: true
     }
   },
   methods: {
@@ -163,6 +168,7 @@ export default {
         this.map.flyTo(this.center, 10, {
           animate: true
         })
+        if (this.isMobile) this.searchCardShow = false
       })
     },
     getLocationCity (lat, long) {
@@ -185,6 +191,9 @@ export default {
     },
     cleanAreaSelect () {
       this.$store.commit('route/SET_AREA_SELECT', null)
+    },
+    toggleSearchCard () {
+      this.searchCardShow = !this.searchCardShow
     }
   },
   mounted () {
