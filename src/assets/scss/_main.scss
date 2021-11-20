@@ -1,9 +1,6 @@
 body{
   font-size: 16px;
 }
-.h6{
-  font-size: 16px;
-}
 .letter-1{
   letter-spacing: $letter-1;
 }
@@ -42,4 +39,16 @@ body{
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
+}
+.breadcrumb{
+  li{
+    font-size: 14px;
+  }
+}
+.breadcrumb-item + .breadcrumb-item::before{
+  font-weight: $font-weight-bold;
+}
+.fa-chevron-left:before,.fa-chevron-right::before{
+  font-size: 2px;
+
 }
