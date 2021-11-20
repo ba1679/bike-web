@@ -1,7 +1,7 @@
 <template>
   <div class="card search-card" :class="position">
     <div class="text-center" v-if="isMobile">
-      <button class="btn" type="button" @click="toToggleSearchCard">
+      <button class="btn btn-block" type="button" @click="toToggleSearchCard">
         <i class="fas fa-chevron-down" v-if="searchCardShow"></i>
         <i class="fas fa-chevron-up" v-else></i>
       </button>
