@@ -1,0 +1,47 @@
+
+.nav-item{
+  position: relative;
+  &:hover{
+    > .nav-child{
+      opacity: 1;
+     }
+  }
+}
+.nav-child{
+  z-index: 1000;
+  position: absolute;
+  top: 55px;
+  left: 7px;
+  opacity: 0;
+  transition: all .3s;
+  background-color: $primary;
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+  li:first-child{
+    border-bottom: 2px solid $white;
+  }
+  a{
+    letter-spacing: $letter-2;
+    color: $white;
+  }
+  li:hover{
+    a{
+      color: $yellow-300;
+    }
+  }
+ 
+}
+
+
+.logo-font{
+  font-family: Oswald;
+  }
+.sticky-footer{
+  display: flex;
+  font-display: column;
+  min-height: 100vh;
+}
+.sticky-bottom{
+  margin-top: auto;
+}
