@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid position-relative">
+  <div class="container-fluid position-relative px-0">
     <LMap
       ref="map"
       id="map"
@@ -17,6 +17,7 @@
         v-if="geoJsonData.features.length"
       />
     </LMap>
+
     <SearchCard
       :cities="cities"
       :areaList="areaList"
@@ -26,6 +27,9 @@
       :inputPlaceholder="'請輸入路線關鍵字(非必填)'"
       @update:keyWord="keyWord = $event"
       @loadCityData="searchShapeData"
+      @cleanAreaSelect="cleanAreaSelect"
+      @toggleSearchCard="toggleSearchCard"
+      :searchCardShow="searchCardShow"
     >
       <template v-slot:title>
         <h2 class="card-title letter-5">路線搜尋</h2>
@@ -55,6 +59,7 @@ export default {
     ...mapState(['cities']),
     ...mapState('route', ['areaSelect', 'noData']),
     ...mapGetters({
+      isMobile: 'isMobile',
       routesData: 'route/filteredRoutes'
     }),
     areaList () {
@@ -82,7 +87,7 @@ export default {
   data () {
     return {
       map: null,
-      zoom: 8,
+      zoom: 13,
       tileLayerClass: (url, options) => L.mapboxGL(options),
       layerOptions: {
         accessToken:
@@ -121,15 +126,16 @@ export default {
             { minWidth: 250 }
           )
         }
-      }
+      },
+      searchCardShow: true
     }
   },
   methods: {
-    loadBikeShapeData () {
+    loadBikeShapeData (city = this.citySelect) {
       this.$store.dispatch('setIsLoading', true)
       return this.$store
         .dispatch('route/getCityRouteShape', {
-          city: this.citySelect,
+          city,
           keyword: this.keyWord
         })
         .then(() => {
@@ -159,41 +165,57 @@ export default {
     },
     searchShapeData () {
       return this.loadBikeShapeData().then(() => {
-        this.zoom = 15
-        this.map.flyTo(this.center, 15, {
+        this.map.flyTo(this.center, 10, {
           animate: true
         })
+        if (this.isMobile) this.searchCardShow = false
       })
+    },
+    getLocationCity (lat, long) {
+      return this.axios
+        .get(
+          `https://api.nlsc.gov.tw/other/TownVillagePointQuery/${long}/${lat}`
+        )
+        .then((res) => {
+          const { ctyName, townName } = res.data
+          const enCity = this.cities.find((item) => {
+            return item.CityName === ctyName
+          })
+          const currArea = enCity.AreaList.find((item) => {
+            return item.AreaName === townName
+          }).AreaName
+          this.citySelect = enCity.CityEngName
+          this.$store.commit('route/SET_AREA_SELECT', currArea)
+          return res
+        })
+    },
+    cleanAreaSelect () {
+      this.$store.commit('route/SET_AREA_SELECT', null)
+    },
+    toggleSearchCard () {
+      this.searchCardShow = !this.searchCardShow
     }
-  },
-  created () {
-    this.loadBikeShapeData()
   },
   mounted () {
     this.$nextTick(() => {
       this.map = this.$refs.map.mapObject
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords
+        this.getLocationCity(latitude, longitude).then(() => {
+          this.loadBikeShapeData(this.citySelect)
+        })
+      })
     })
   },
   watch: {
     routesData: {
       deep: true,
-      handler (val) {
+      handler () {
         this.polyRouteLine()
-        if (!val.length) {
-          this.$store.commit('route/SET_NO_DATA', true)
-        } else if (val.length) {
-          this.$store.commit('route/SET_NO_DATA', false)
-        }
       }
     },
     noData (val) {
       if (val) alert('查無路線')
-    },
-    citySelect () {
-      this.map.setZoom(8, {
-        animate: true
-      })
-      this.$store.commit('route/SET_AREA_SELECT', null)
     }
   }
 }

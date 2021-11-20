@@ -30,9 +30,17 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="#"
-            >最新消息 <span class="sr-only">(current)</span></a
-          >
+          <router-link class="nav-link" :to="{ name: 'Bulletin' }"
+            >最新消息 <span class="sr-only">(current)</span>
+          </router-link>
+          <ul class="list-unstyled nav-child">
+            <li class="pb-1">
+              <router-link :to="{ name: 'Bulletin' }">最新公告</router-link>
+            </li>
+            <li class="mt-1">
+              <router-link :to="{ name: 'Activities' }">活動資訊</router-link>
+            </li>
+          </ul>
         </li>
         <li class="nav-item" :class="{ active: routeName === 'Route' }">
           <router-link class="nav-link" :to="{ name: 'Route' }"

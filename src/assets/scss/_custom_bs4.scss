@@ -7,6 +7,10 @@
 .nav-link:hover{
   border-bottom: 2px solid $primary;
 }
+.navbar-light .navbar-toggler{
+  color: $black;
+  border-color: transparent;
+}
 .list-group-item{
   letter-spacing: $letter-05;
   color: $gray-200;

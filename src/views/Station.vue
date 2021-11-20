@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid position-relative">
+  <div class="container-fluid position-relative px-0">
     <LMap
       ref="map"
       id="map"
@@ -80,6 +80,8 @@
       :inputPlaceholder="'請輸入站牌關鍵字(非必填)'"
       @update:keyWord="keyWord = $event"
       @loadCityData="loadCityStationsData"
+      @toggleSearchCard="toggleSearchCard"
+      :searchCardShow="searchCardShow"
     >
       <template v-slot:title>
         <h2 class="card-title letter-5">站牌搜尋</h2>
@@ -105,6 +107,7 @@ export default {
   computed: {
     ...mapState('station', ['noData']),
     ...mapGetters({
+      isMobile: 'isMobile',
       stationsData: 'station/stationsAndAvailability'
     }),
     center () {
@@ -177,7 +180,8 @@ export default {
       citySelect: 'Taipei',
       serviceSelect: 'rent',
       dataLoaded: false,
-      keyWord: ''
+      keyWord: '',
+      searchCardShow: true
     }
   },
   methods: {
@@ -229,13 +233,31 @@ export default {
           city: this.citySelect,
           keyword: this.keyWord
         })
-        .then(() => {})
+        .then(() => {
+          if (this.isMobile) this.searchCardShow = false
+        })
         .catch((err) => {
           this.$store.dispatch('setIsLoading', false)
           console.log(err)
         })
     },
-    loadNearByCityStationData () {},
+    loadNearByCityStationData (lat, long) {
+      this.$store.dispatch('setIsLoading', true)
+      if (lat && long) {
+        this.getLocationCity(lat, long)
+        return this.$store
+          .dispatch('station/fetchNearByCityStationsData', { lat, long })
+          .then(() => {
+            this.$store.dispatch('setIsLoading', false)
+          })
+          .catch((err) => {
+            this.$store.dispatch('setIsLoading', false)
+            console.log(err)
+          })
+      } else {
+        this.loadCityStationsData()
+      }
+    },
     iconColor (serviceStatus, rentIcon, returnIcon) {
       if (this.serviceSelect === 'rent') {
         if (serviceStatus !== 1) {
@@ -266,14 +288,31 @@ export default {
             break
         }
       }
+    },
+    getLocationCity (lat, long) {
+      this.axios
+        .get(
+          `https://api.nlsc.gov.tw/other/TownVillagePointQuery/${long}/${lat}`
+        )
+        .then((res) => {
+          const city = res.data.ctyName
+          const enCity = this.cities.find((item) => {
+            return item.CityName === city
+          })
+          this.citySelect = enCity.CityEngName
+        })
+    },
+    toggleSearchCard () {
+      this.searchCardShow = !this.searchCardShow
     }
-  },
-  created () {
-    this.loadCityStationsData()
   },
   mounted () {
     this.$nextTick(() => {
       this.map = this.$refs.map.mapObject
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords
+        this.loadNearByCityStationData(latitude, longitude)
+      })
     })
   },
   watch: {

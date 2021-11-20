@@ -66,6 +66,26 @@ export default {
           })
       })
     },
+    fetchNearByCityStationsData ({ dispatch, commit }, { lat, long }) {
+      return new Promise((resolve, reject) => {
+        return dispatch('getNearByCityBikeStations', { lat, long })
+          .then(() => {
+            return dispatch('getNearByCityBikeStationsAvailability', {
+              lat,
+              long
+            })
+          })
+          .then(() => {
+            resolve()
+          })
+          .catch((err) => {
+            commit('CLEAR_STATIONS')
+            commit('CLEAR_STATIONS_AVAILABILITY')
+            const errText = 'fetch nearby stations data: ' + err
+            reject(errText)
+          })
+      })
+    },
     getCityBikeStations ({ dispatch, commit, rootState }, { city, keyword }) {
       dispatch('getAuthorizationHeader', {}, { root: true }).then(() => {
         if (keyword) {
@@ -84,8 +104,7 @@ export default {
             })
             .catch((err) => {
               const errText = 'get city bike station: ' + err
-              return errText
-              // return Promise.reject(errText)
+              return Promise.reject(errText)
             })
         } else {
           return axios
@@ -121,6 +140,51 @@ export default {
           })
           .catch((err) => {
             const errText = 'get city bike station availability: ' + err
+            return Promise.reject(errText)
+          })
+      })
+    },
+    getNearByCityBikeStations ({ dispatch, commit, rootState }, { lat, long }) {
+      dispatch('getAuthorizationHeader', {}, { root: true }).then(() => {
+        return axios
+          .get(
+            `${process.env.VUE_APP_APIPATH}Bike/Station/NearBy?$spatialFilter=nearby(${lat},${long} 
+            ,1000)&$format=JSON`,
+            {
+              headers: rootState.apiHeader
+            }
+          )
+          .then((res) => {
+            if (!res.data.length) commit('SET_NO_DATA', true)
+            else commit('SET_NO_DATA', false)
+            commit('SET_STATIONS', res.data)
+            return res
+          })
+          .catch((err) => {
+            const errText = 'get nearby city bike station: ' + err
+            return Promise.reject(errText)
+          })
+      })
+    },
+    getNearByCityBikeStationsAvailability (
+      { dispatch, commit, rootState },
+      { lat, long }
+    ) {
+      dispatch('getAuthorizationHeader', {}, { root: true }).then(() => {
+        return axios
+          .get(
+            `${process.env.VUE_APP_APIPATH}Bike/Availability/NearBy?$spatialFilter=nearby(${lat},${long} 
+            ,1000)&$format=JSON`,
+            {
+              headers: rootState.apiHeader
+            }
+          )
+          .then((res) => {
+            commit('SET_STATIONS_AVAILABILITY', res.data)
+            return res
+          })
+          .catch((err) => {
+            const errText = 'get nearby city bike station availability : ' + err
             return Promise.reject(errText)
           })
       })
