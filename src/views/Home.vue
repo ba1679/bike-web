@@ -91,9 +91,15 @@
           </li>
         </ul>
         <div class="text-center">
-          <button class="btn btn-primary shadow" type="button">
-            更多最新公告
-          </button>
+          <router-link :to="{ name: 'Bulletin' }" custom v-slot="{ navigate }">
+            <button
+              class="btn btn-primary shadow"
+              type="button"
+              @click="navigate"
+            >
+              更多最新公告
+            </button>
+          </router-link>
         </div>
       </section>
       <!-- activities -->
@@ -123,9 +129,15 @@
           </li>
         </ul>
         <div class="text-center">
-          <button class="btn btn-primary shadow" type="button">
-            更多活動資訊
-          </button>
+          <router-link :to="{ name: 'Bulletin' }" custom v-slot="{ navigate }">
+            <button
+              class="btn btn-primary shadow"
+              type="button"
+              @click="navigate"
+            >
+              更多活動資訊
+            </button>
+          </router-link>
         </div>
       </section>
     </div>
