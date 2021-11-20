@@ -14,6 +14,7 @@ export default new Vuex.Store({
     isLoading: false,
     breakPoint: null,
     isMobile: false,
+    navBarShow: false,
     cities: cities,
     apiHeader: null
   },
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     },
     isMobile (state) {
       return state.isMobile
+    },
+    navBarShow (state) {
+      return state.navBarShow
     }
   },
   mutations: {
@@ -40,6 +44,12 @@ export default new Vuex.Store({
     },
     SET_API_HEADER (state, header) {
       state.apiHeader = header
+    },
+    TOGGLE_NAV_BAR_SHOW (state) {
+      state.navBarShow = !state.navBarShow
+    },
+    CLOSE_NAV_BAR (state) {
+      state.navBarShow = false
     }
   },
   actions: {
