@@ -10,8 +10,11 @@
     <section class="mb-7">
       <div class="h1 text-center mb-5">最新公告</div>
       <div class="container">
-        <div class="d-flex justify-content-center">
-          <div class="form-group row mr-5">
+        <div
+          class="d-flex justify-content-center mb-3 mb-lg-0"
+          :class="{ 'flex-column': isMobile }"
+        >
+          <div class="form-group row mr-lg-5">
             <label for="category" class="col-sm-5 col-form-label"
               >選擇分類</label
             >
@@ -21,7 +24,7 @@
                 class="form-control custom-select-sm font-weight-light"
               >
                 <option selected>全部分類</option>
-                <option>緊急通知</option>
+                <option>緊急公告</option>
                 <option>營運資訊</option>
               </select>
             </div>
@@ -40,7 +43,7 @@
               </select>
             </div>
           </div>
-          <div class="ml-5">
+          <div class="ml-lg-5" :class="{ 'text-right': isMobile }">
             <button type="button" class="btn btn-warning btn-sm text-white">
               查詢
             </button>
