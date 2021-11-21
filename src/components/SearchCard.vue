@@ -45,7 +45,7 @@
                 class="form-control custom-select select-icon font-weight-light"
                 v-model="childAreaSelect"
               >
-                <option selected :value="null">請選擇鄉鎮</option>
+                <option selected :value="null">所有鄉鎮</option>
                 <option
                   v-for="(area, i) of areaList"
                   :key="i"

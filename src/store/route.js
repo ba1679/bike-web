@@ -11,7 +11,7 @@ export default {
     filteredRoutes (state) {
       if (state.areaSelect) {
         const filtered = state.routes.filter((r) => r.Town === state.areaSelect)
-        return filtered.length ? filtered : state.routes
+        return filtered.length ? filtered : []
       } else {
         return state.routes
       }
