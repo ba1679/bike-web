@@ -37,7 +37,7 @@ export default {
         if (keyword) {
           return axios
             .get(
-              `${process.env.VUE_APP_APIPATH}Cycling/Shape/${city}?$filter=contains(RouteName, '${keyword}')&$format=JSON`,
+              `${process.env.VUE_APP_API_DOMAIN}/v2/Cycling/Shape/City/${city}?$filter=contains(RouteName, '${keyword}')&$format=JSON`,
               {
                 headers: rootState.apiHeader
               }
@@ -56,7 +56,7 @@ export default {
         } else {
           return axios
             .get(
-              `${process.env.VUE_APP_APIPATH}Cycling/Shape/${city}?$format=JSON`,
+              `${process.env.VUE_APP_API_DOMAIN}/v2/Cycling/Shape/City/${city}?$format=JSON`,
               {
                 headers: rootState.apiHeader
               }
